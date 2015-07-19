@@ -9,7 +9,7 @@ Website: http://www.mongodb.org/
 Display-Name: MongoDB 3.0.4
 Cartridge-Short-Name: MONGODB
 Cartridge-Version: '1.1.0'
-Cartridge-Vendor: icflorescu
+Cartridge-Vendor: ekkleesia2
 Categories:
 - service
 - database
