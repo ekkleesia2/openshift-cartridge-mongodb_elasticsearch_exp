@@ -3,7 +3,7 @@
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
 # Download
-curl -L -o ${OPENSHIFT_DATA_DIR}tmp.tgz http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${2}.tgz
+curl -L -o ${OPENSHIFT_DATA_DIR}tmp.tgz http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-${2}.tgz
 
 # Create bin directory if necessary
 mkdir -p ${OPENSHIFT_DATA_DIR}.mongodb/bin
