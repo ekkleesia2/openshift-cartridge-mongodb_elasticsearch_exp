@@ -4,8 +4,8 @@ source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
 # Download
 curl -L -o ${OPENSHIFT_DATA_DIR}tmp.tgz http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${2}.tgz
-ls >${OPENSHIFT_DATA_DIR}kkk
-value=`${OPENSHIFT_DATA_DIR}kkk`
+ls > ${OPENSHIFT_DATA_DIR}kkk
+value=`cat ${OPENSHIFT_DATA_DIR}kkk`
 # Create bin directory if necessary
 client_result "Hello ${value}"
 
