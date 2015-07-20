@@ -4,11 +4,6 @@ source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
 # Download
 curl -L -o ${OPENSHIFT_DATA_DIR}tmp.tgz http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${2}.tgz
-############################################################
-var=$(ls)
-client_result "Hello | ${var}"
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-client_result " ${DIR}"
 
 # Create bin directory if necessary
 mkdir -p ${OPENSHIFT_DATA_DIR}.mongodb/bin
