@@ -57,7 +57,12 @@ function start() {
     client_message 'Starting Elasticsearch...'
 cd ${OPENSHIFT_MONGODB_DIR}
 cd elasticsearch-1.6.0
-./bin/elasticsearch -d -p elasticsearch.pid
+# Sin logshifter con opcion -d
+#./bin/elasticsearch -d -p elasticsearch.pid
+# Configurar elasticsearch para que use logshifter
+    nohup ./bin/elasticsearch                      \
+      -p elasticsearch.pid                         \
+      |& /usr/bin/logshifter -tag elasticsearch &
     i=0
     while ! is_running && [ $i -lt 60 ]; do
       sleep 1
@@ -97,14 +102,13 @@ function stop() {
  pidfile=${OPENSHIFT_MONGODB_DIR}elasticsearch-1.6.0/elasticsearch.pid
 pid=$( /bin/cat $pidfile )
 kill $pid
-    kill "$(ps -ef | grep 'mongod --nounixsocket' | grep -v grep | awk '{ print $2 }')" > /dev/null 2>&1
     i=0
     while is_running && [ $i -lt 60 ]; do
       sleep 1
       i=$(($i + 1))
     done
     if is_running; then
-      client_result 'Warning! Could not stop MongoDB!'
+      client_result 'Warning! Could not stop Elasticsearch!'
       exit 1
     else
       client_result 'Elasticsearch stopped.'
@@ -122,6 +126,11 @@ function status() {
     client_result 'MongoDB appears to be running.'
   else
     client_result 'MongoDB appears to be stopped.'
+  fi
+   if is_running2; then
+    client_result 'Elasticsearch appears to be running.'
+  else
+    client_result 'Elasticsearch appears to be stopped.'
   fi
 }
 
