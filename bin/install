@@ -17,7 +17,7 @@ client_result " ${DIR}"
 curl -L -o tmp.tgz https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-3.0.4.tgz
 #Env
 tar -xvzf tmp.tgz
-cp -rf mongodb-linux-x86_64-rhel62-3.0.4 ${OPENSHIFT_DATA_DIR}.mongodb
+cp -rf mongodb-linux-x86_64-rhel62-3.0.4 .mongodb
 var_0=$(ls ${OPENSHIFT_DATA_DIR})
 client_result "---------------->"
 client_result "ls"
