@@ -10,15 +10,30 @@ function is_running() {
   fi
 }
 
+function is_running2 {
+  pidfile=${OPENSHIFT_MONGODB_DIR}elasticsearch-1.6.0/elasticsearch.pid
+
+  if [ -f $pidfile ]; then
+    cass_pid=`cat $pidfile 2> /dev/null`
+
+    if `ps --pid $cass_pid > /dev/null 2>&1` 
+    then
+      return 0
+    fi
+  fi
+
+  return 1
+}
+
 function start() {
   if is_running; then
     client_result 'MongoDB is already running.'
   else
     client_message 'Starting MongoDB...'
-    nohup ${OPENSHIFT_MONGODB_DIR}mongodb/bin/mongod \
+    nohup ${OPENSHIFT_DATA_DIR}.mongodb/bin/mongod \
       --nounixsocket                               \
       --storageEngine wiredTiger                   \
-      --dbpath ${OPENSHIFT_MONGODB_DIR}mongodb/data  \
+      --dbpath ${OPENSHIFT_DATA_DIR}.mongodb/data  \
       --bind_ip $OPENSHIFT_MONGODB_IP              \
       --quiet                                      \
       --logRotate reopen                           \
@@ -33,6 +48,25 @@ function start() {
       client_result 'MongoDB started.'
     else
       client_result 'Warning! Could not start MongoDB!'
+      exit 1
+    fi
+  fi
+    if is_running2; then
+    client_result 'Elasticsearch is already running.'
+  else
+    client_message 'Starting Elasticsearch...'
+cd ${OPENSHIFT_MONGODB_DIR}
+cd elasticsearch-1.6.0
+./bin/elasticsearch -d -p elasticsearch.pid
+    i=0
+    while ! is_running && [ $i -lt 60 ]; do
+      sleep 1
+      i=$(($i + 1))
+    done
+    if is_running; then
+      client_result 'Elasticsearch started.'
+    else
+      client_result 'Warning! Could not start Elasticsearch!'
       exit 1
     fi
   fi
@@ -54,6 +88,26 @@ function stop() {
       exit 1
     else
       client_result 'MongoDB stopped.'
+    fi
+  fi
+    if ! is_running2; then
+      client_result 'Elasticsearch is already stopped.'
+  else
+    client_message 'Stopping Elasticsearch...'
+ pidfile=${OPENSHIFT_MONGODB_DIR}elasticsearch-1.6.0/elasticsearch.pid
+pid=$( /bin/cat $pidfile )
+kill $pid
+    kill "$(ps -ef | grep 'mongod --nounixsocket' | grep -v grep | awk '{ print $2 }')" > /dev/null 2>&1
+    i=0
+    while is_running && [ $i -lt 60 ]; do
+      sleep 1
+      i=$(($i + 1))
+    done
+    if is_running; then
+      client_result 'Warning! Could not stop MongoDB!'
+      exit 1
+    else
+      client_result 'Elasticsearch stopped.'
     fi
   fi
 }
