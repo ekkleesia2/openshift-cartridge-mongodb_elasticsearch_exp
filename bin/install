@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#${OPENSHIFT_MONGODB_DIR}
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
 # Verbosidad a mil
 # Download
@@ -8,7 +9,7 @@ client_result "--------------------------------->"
 client_result "DIR"
 client_result " ${DIR}"
 
-cd ${OPENSHIFT_DATA_DIR}
+cd ${OPENSHIFT_MONGODB_DIR}
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 client_result "--------------------------------->"
 client_result "DIR"
@@ -18,7 +19,7 @@ curl -L -o tmp.tgz https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-
 #Env
 tar -xvzf tmp.tgz
 cp -rf mongodb-linux-x86_64-rhel62-3.0.4 mongodb
-var_0=$(ls ${OPENSHIFT_DATA_DIR})
+var_0=$(ls ${OPENSHIFT_MONGODB_DIR})
 client_result "---------------->"
 client_result "ls"
 client_result "${var_0}"
@@ -29,10 +30,10 @@ client_result "${var_0}"
 #tar -xvzf ${OPENSHIFT_DATA_DIR}tmp.tgz --strip-components=1 -C ${OPENSHIFT_DATA_DIR}.mongodb mongodb-linux-x86_64-${2}/bin/mongod
 
 # Remove downloaded archive
-rm ${OPENSHIFT_DATA_DIR}tmp.tgz
+rm ${OPENSHIFT_MONGODB_DIR}tmp.tgz
 
 # Create data directory if necessary
-mkdir -p ${OPENSHIFT_DATA_DIR}mongodb/data
+mkdir -p ${OPENSHIFT_MONGODB_DIR}mongodb/data
 
 # Add MONGODB_URL environment variable
 if [ -z "$OPENSHIFT_MONGODB_PROXY_PORT" ]; then
