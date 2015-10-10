@@ -1,4 +1,4 @@
-# Custom MongoDB cartridge for OpenShift
+# Custom MongoDB cartridge for OpenShift with Elasticsearch
 
 This is a custom OpenShift cartridge providing MongoDB > 3.0.3.
 
